@@ -25,6 +25,8 @@ export default defineConfig({
       external: [
         'react',
         'react-dom',
+        'react/jsx-runtime',
+        'react/jsx-dev-runtime',
         '@radix-ui/react-dialog',
         '@radix-ui/react-slot',
         '@dnd-kit/core',
@@ -37,6 +39,8 @@ export default defineConfig({
         globals: {
           react: 'React',
           'react-dom': 'ReactDOM',
+          'react/jsx-runtime': 'React',
+          'react/jsx-dev-runtime': 'React',
           '@radix-ui/react-dialog': 'RadixDialog',
           '@radix-ui/react-slot': 'RadixSlot',
           '@dnd-kit/core': 'DndKitCore',
