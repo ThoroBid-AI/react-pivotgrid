@@ -1,0 +1,1 @@
+- limit using emojis in docs and readmes and do not write too many inline comments

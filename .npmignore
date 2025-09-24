@@ -1,0 +1,68 @@
+# Source files
+src/
+tests/
+examples/
+docs/
+
+# Configuration files
+.eslintrc.js
+.prettierrc
+.prettierignore
+tsconfig.json
+tsconfig.test.json
+vite.config.ts
+vitest.config.ts
+
+# Development files
+.gitignore
+CONTRIBUTING.md
+*.md
+!README.md
+
+# Dependencies
+node_modules/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Coverage and test files
+coverage/
+*.lcov
+
+# Logs
+logs/
+*.log
+
+# Environment files
+.env*
+
+# Build artifacts (except dist)
+build/
+examples/dist/
+docs/build/
+docs/.docusaurus/
+
+# Cache directories
+.cache/
+.parcel-cache/
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# Optional files
+.eslintcache
+.npm
+.yarn-integrity
+*.tsbuildinfo
+
+# Temporary files
+tmp/
+temp/
