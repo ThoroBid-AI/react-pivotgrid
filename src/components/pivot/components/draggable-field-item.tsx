@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { DraggableFieldWithFilter } from '../draggable-field-with-filter';
-import type { DataItem, FieldKey, DraggableFieldItemProps } from '../types';
+import type { DataItem, DraggableFieldItemProps } from '../types';
 
 export const DraggableFieldItem = React.memo(function DraggableFieldItem<
   T extends Record<string, unknown> = Record<string, unknown>

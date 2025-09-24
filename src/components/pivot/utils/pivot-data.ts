@@ -1,4 +1,4 @@
-import { aggregate, AggregationFunction } from './aggregations';
+import { aggregate } from './aggregations';
 import type {
   DataItem,
   FieldKey,
@@ -6,7 +6,6 @@ import type {
   PivotCell,
   PivotTable,
   AggregatedValues,
-  ValueFieldConfig,
   FilterConfig,
 } from '../types';
 
@@ -116,7 +115,7 @@ export function generatePivotTable<T extends Record<string, unknown> = Record<st
   const columnTotals: AggregatedValues[] = [];
 
   // Generate cells
-  rowKeys.forEach((rowKey, rowIndex) => {
+  rowKeys.forEach((rowKey, _rowIndex) => {
     const row: PivotCell<T>[] = [];
 
     columnKeys.forEach((colKey) => {

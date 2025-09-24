@@ -7,11 +7,10 @@ export const RendererProvider = React.memo(function RendererProvider<
   T extends Record<string, unknown> = Record<string, unknown>
 >({
   selectedRendererId,
-  onRendererChange,
   rendererProps,
   registry,
   className = ''
-}: RendererProviderProps<T> & {
+}: Omit<RendererProviderProps<T>, 'onRendererChange'> & {
   registry: RendererRegistry<T>;
 }) {
   const selectedRenderer = registry.getRenderer(selectedRendererId);

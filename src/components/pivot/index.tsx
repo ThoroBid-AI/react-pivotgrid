@@ -11,7 +11,7 @@ import type {
 import { AggregationFunction } from './utils/aggregations';
 import { useDebouncedPivot } from './utils/use-debounced-pivot';
 import { PivotValidationError } from './utils/pivot-data-async';
-import { Table, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 
 interface ReactPivotGridProps<T extends Record<string, unknown> = Record<string, unknown>> {
   data: DataItem<T>[];

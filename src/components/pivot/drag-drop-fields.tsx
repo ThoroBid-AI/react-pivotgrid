@@ -23,7 +23,6 @@ import {
   horizontalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { RendererProvider } from './components/renderer-provider';
-import { RendererSelector } from './components/renderer-selector';
 import { defaultRendererRegistry } from './renderers';
 import type {
   PivotFieldState,
@@ -687,7 +686,6 @@ export function DragDropFields<T extends Record<string, unknown> = Record<string
             )}
             <RendererProvider
               selectedRendererId={selectedRendererId}
-              onRendererChange={onRendererChange || (() => {})}
               registry={defaultRendererRegistry}
               rendererProps={{
                 pivotData: pivotTable,
@@ -831,7 +829,6 @@ export function DragDropFields<T extends Record<string, unknown> = Record<string
           )}
           <RendererProvider
             selectedRendererId={selectedRendererId}
-            onRendererChange={onRendererChange || (() => {})}
             registry={defaultRendererRegistry}
             rendererProps={{
               pivotData: pivotTable,

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo, memo, JSX } from 'react';
+import { useMemo, memo, JSX } from 'react';
 import {
   useReactTable,
   getCoreRowModel,
@@ -107,6 +107,33 @@ function calculateRowSpan(
   return span;
 }
 
+// Helper function to check if all values in a row are zero
+function isRowAllZeros<T extends Record<string, unknown>>(row: PivotCell<T>[], rowTotal: AggregatedValues): boolean {
+  // Check all cells in the row
+  const allCellsZero = row.every(cell => {
+    return Object.values(cell.value).every(val => val === 0);
+  });
+
+  // Check row total
+  const totalZero = Object.values(rowTotal).every(val => val === 0);
+
+  return allCellsZero && totalZero;
+}
+
+// Helper function to check if all values in a column are zero
+function isColumnAllZeros<T extends Record<string, unknown>>(columnIndex: number, cells: PivotCell<T>[][], columnTotal: AggregatedValues): boolean {
+  // Check all cells in the column
+  const allCellsZero = cells.every(row => {
+    if (!row[columnIndex]) return true;
+    return Object.values(row[columnIndex].value).every(val => val === 0);
+  });
+
+  // Check column total
+  const totalZero = Object.values(columnTotal).every(val => val === 0);
+
+  return allCellsZero && totalZero;
+}
+
 export const PivotTableRenderer = memo(function PivotTableRenderer<
   T extends Record<string, unknown> = Record<string, unknown>
 >({
@@ -117,33 +144,6 @@ export const PivotTableRenderer = memo(function PivotTableRenderer<
   rowSortState,
   columnSortState,
 }: PivotTableRendererProps<T>) {
-
-  // Helper function to check if all values in a row are zero
-  const isRowAllZeros = (row: PivotCell<T>[], rowTotal: AggregatedValues): boolean => {
-    // Check all cells in the row
-    const allCellsZero = row.every(cell => {
-      return Object.values(cell.value).every(val => val === 0);
-    });
-
-    // Check row total
-    const totalZero = Object.values(rowTotal).every(val => val === 0);
-
-    return allCellsZero && totalZero;
-  };
-
-  // Helper function to check if all values in a column are zero
-  const isColumnAllZeros = (columnIndex: number, cells: PivotCell<T>[][], columnTotal: AggregatedValues): boolean => {
-    // Check all cells in the column
-    const allCellsZero = cells.every(row => {
-      if (!row[columnIndex]) return true;
-      return Object.values(row[columnIndex].value).every(val => val === 0);
-    });
-
-    // Check column total
-    const totalZero = Object.values(columnTotal).every(val => val === 0);
-
-    return allCellsZero && totalZero;
-  };
 
   // Transform pivot data into table rows with sorting first (needed for sortedRowHeaders)
   const { data, sortedRowHeaders, validColumnIndices, filteredColumnHeaders, filteredColumnTotals } = useMemo(() => {
@@ -296,7 +296,7 @@ export const PivotTableRenderer = memo(function PivotTableRenderer<
       filteredColumnHeaders: filteredColHeaders,
       filteredColumnTotals: filteredColTotals
     };
-  }, [pivotData, rowFields, rowSortState]);
+  }, [pivotData, rowFields, rowSortState, columnFields.length]);
 
   const columns = useMemo(() => {
     const columnHelper = createColumnHelper<TableRow<T>>();
@@ -460,35 +460,6 @@ export const PivotTableRenderer = memo(function PivotTableRenderer<
         columnIndices
       );
       cols.push(...columnGroups);
-    } else if (filteredColumnHeaders.length > 0 && columnFields.length > 0) {
-      // This case should not occur - if we have columnHeaders, we should have columnFields
-      columnIndices.forEach((colIndex) => {
-        cols.push(
-          columnHelper.accessor(
-            (row) => {
-              const cell = row.cells?.[colIndex];
-              if (!cell) return '';
-
-              if (Object.keys(cell.value).length === 1) {
-                return formatAggregatedValue(Object.values(cell.value)[0]);
-              }
-
-              return Object.entries(cell.value)
-                .map(([key, val]) => `${key}: ${formatAggregatedValue(val)}`)
-                .join('\n');
-            },
-            {
-              id: `col-${colIndex}`,
-              header: valueFields.length > 0 ? valueFields.join(', ') : 'Values',
-              cell: (info) => (
-                <div className="text-xs text-right whitespace-pre-line">
-                  {info.getValue() as string}
-                </div>
-              ),
-            }
-          )
-        );
-      });
     }
 
     // Add totals column if there are row totals

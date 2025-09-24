@@ -26,7 +26,7 @@ export function transformPivotToChartData<T extends Record<string, unknown>>(
   rowFields: FieldKey<T>[],
   columnFields: FieldKey<T>[],
   valueFields: FieldKey<T>[],
-  orientation: 'vertical' | 'horizontal' = 'vertical'
+  _orientation: 'vertical' | 'horizontal' = 'vertical'
 ): TransformedChartData {
   const { rowHeaders, columnHeaders, cells } = pivotData;
 
@@ -108,7 +108,7 @@ export function transformPivotToChartData<T extends Record<string, unknown>>(
  */
 function createCategoryName<T extends Record<string, unknown>>(
   rowHeader: string[],
-  rowFields: FieldKey<T>[]
+  _rowFields: FieldKey<T>[]
 ): string {
   if (rowHeader.length === 1) {
     return rowHeader[0];
@@ -123,7 +123,7 @@ function createCategoryName<T extends Record<string, unknown>>(
  */
 function createSeriesKey<T extends Record<string, unknown>>(
   columnHeader: string[],
-  columnFields: FieldKey<T>[]
+  _columnFields: FieldKey<T>[]
 ): string {
   if (columnHeader.length === 1) {
     return columnHeader[0];
@@ -138,7 +138,7 @@ function createSeriesKey<T extends Record<string, unknown>>(
  */
 function getCellDisplayValue<T extends Record<string, unknown>>(
   aggregatedValues: AggregatedValues,
-  valueFields: FieldKey<T>[]
+  _valueFields: FieldKey<T>[]
 ): number {
   // Get all numeric values from the cell
   const numericValues = Object.values(aggregatedValues)

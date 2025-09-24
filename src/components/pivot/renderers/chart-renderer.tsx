@@ -12,7 +12,7 @@ export class ChartRenderer<T extends Record<string, unknown> = Record<string, un
   readonly isAvailable = false;
   readonly comingSoon = true;
 
-  render(props: BaseRendererProps<T>) {
+  render(_props: BaseRendererProps<T>) {
     return (
       <div className="flex items-center justify-center h-64 bg-gray-50 dark:bg-gray-800 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600">
         <div className="text-center">

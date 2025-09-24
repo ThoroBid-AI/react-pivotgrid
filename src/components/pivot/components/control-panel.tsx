@@ -3,10 +3,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { AggregationSelector } from '../aggregation-selector';
-import { AggregationFunction } from '../utils/aggregations';
 import { RendererSelector } from './renderer-selector';
 import { defaultRendererRegistry } from '../renderers';
-import type { ControlPanelProps, DataItem, FieldKey } from '../types';
+import type { ControlPanelProps, FieldKey } from '../types';
 
 export const ControlPanel = React.memo(function ControlPanel<
   T extends Record<string, unknown> = Record<string, unknown>
