@@ -4,18 +4,16 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 
-A powerful, TypeScript-first pivot grid component for React applications. Transform your flat data into interactive, dynamic pivot tables with comprehensive aggregation functions, advanced filtering, and responsive design.
+A dynamic pivot grid component for React built on TanStack Table with drag-and-drop functionality. Transform your flat data into interactive pivot tables with real-time field manipulation and aggregation.
 
-## 🚀 Features
+## Features
 
-- **🎯 TypeScript-First** - Complete type safety with comprehensive type definitions
-- **📊 14 Aggregation Functions** - count, sum, average, median, variance, min, max, and more
-- **🔍 Advanced Filtering** - Multiple filter operators (contains, equals, greater than, between, etc.)
-- **📱 Responsive Design** - Automatic mobile/desktop view switching
-- **⚡ High Performance** - Optimized for large datasets with debounced calculations
-- **🎨 Customizable** - Themes, custom renderers, and flexible styling
-- **🧪 Well Tested** - Comprehensive test suite focusing on math and filter logic
-- **🔧 Developer Friendly** - Rich API, helpful error messages, and extensive documentation
+- **TypeScript Support** - Complete type safety with TypeScript definitions
+- **Drag & Drop Interface** - Interactive field management with @dnd-kit
+- **Multiple Aggregations** - Support for various aggregation functions
+- **Field Filtering** - Built-in filtering capabilities
+- **Debounced Updates** - Optimized performance with debounced calculations
+- **Customizable Styling** - Built with Tailwind CSS for easy customization
 
 ## 📦 Installation
 
@@ -23,206 +21,121 @@ A powerful, TypeScript-first pivot grid component for React applications. Transf
 npm install @thorobid-ai/react-pivotgrid
 ```
 
-## 🎯 Quick Start
+## Quick Start
 
-### Simple Usage
-
-```tsx
-import React from 'react';
-import { PivotGrid, generateSalesData } from '@thorobid-ai/react-pivotgrid';
-
-function App() {
-  const data = generateSalesData(100); // Generate sample data
-
-  return (
-    <PivotGrid
-      data={data}
-      responsive={true}
-      height="600px"
-    />
-  );
-}
-```
-
-### Advanced Configuration
+### Basic Usage
 
 ```tsx
 import React from 'react';
-import { PivotGrid } from '@thorobid-ai/react-pivotgrid';
+import { ReactPivotGrid } from '@thorobid-ai/react-pivotgrid';
+import '@thorobid-ai/react-pivotgrid/dist/style.css';
 
-const salesData = [
-  { region: 'North', product: 'Laptop', revenue: 5000, quantity: 5, quarter: 'Q1' },
-  { region: 'North', product: 'Mouse', revenue: 200, quantity: 10, quarter: 'Q1' },
-  { region: 'South', product: 'Laptop', revenue: 3000, quantity: 3, quarter: 'Q2' },
+const sampleData = [
+  { region: 'North', product: 'Laptop', category: 'Electronics', sales: 1000, quantity: 10 },
+  { region: 'South', product: 'Mouse', category: 'Electronics', sales: 200, quantity: 20 },
   // ... more data
 ];
 
 function App() {
   return (
-    <PivotGrid
+    <ReactPivotGrid data={sampleData} />
+  );
+}
+```
+
+### With Initial Configuration
+
+```tsx
+import React from 'react';
+import { ReactPivotGrid } from '@thorobid-ai/react-pivotgrid';
+import '@thorobid-ai/react-pivotgrid/dist/style.css';
+
+const salesData = [
+  { region: 'North', product: 'Laptop', category: 'Electronics', sales: 1000, quantity: 10 },
+  { region: 'South', product: 'Mouse', category: 'Electronics', sales: 200, quantity: 20 },
+  // ... more data
+];
+
+function App() {
+  return (
+    <ReactPivotGrid
       data={salesData}
       initialConfig={{
-        rows: ['region', 'product'],
-        columns: ['quarter'],
-        values: [
-          { field: 'revenue', aggregation: 'sum' },
-          { field: 'quantity', aggregation: 'average' }
-        ],
-        filters: [
-          { field: 'region', values: ['North', 'South'] }
-        ]
+        rows: ['region'],
+        columns: ['category'],
+        values: ['sales'],
+        aggregation: 'sum',
+        filters: {
+          region: ['North', 'South']
+        }
       }}
-      theme="light"
-      responsive={true}
-      onConfigChange={(config) => console.log('Config changed:', config)}
-      onError={(error) => console.error('Pivot error:', error)}
+      fieldLabels={{
+        region: 'Region',
+        product: 'Product',
+        category: 'Category',
+        sales: 'Sales ($)',
+        quantity: 'Quantity'
+      }}
     />
   );
 }
 ```
 
-## 🔧 Core Engine Usage
 
-For advanced use cases, you can use the core pivot engine directly:
+## Aggregation Functions
 
-```tsx
-import { PivotEngine, generateSalesData } from '@thorobid-ai/react-pivotgrid';
+The library supports multiple aggregation functions:
 
-const data = generateSalesData(1000);
-const config = {
-  rows: ['region'],
-  columns: ['product'],
-  values: [{ field: 'revenue', aggregation: 'sum' }],
-  filters: []
-};
-
-const engine = new PivotEngine(data, config);
-const pivotTable = engine.generatePivotTable();
-
-console.log('Pivot table:', pivotTable);
-console.log('Summary:', engine.getSummary());
-```
-
-## 📊 Aggregation Functions
-
-The library supports 14 comprehensive aggregation functions:
-
-| Function | Description | Use Case |
-|----------|-------------|----------|
-| `count` | Count of records | Record counting |
-| `countUnique` | Count of unique values | Distinct value analysis |
-| `listUnique` | List of unique values | Value enumeration |
-| `sum` | Sum of numeric values | Total calculations |
-| `integerSum` | Sum of integer values | Whole number totals |
-| `average` | Arithmetic mean | Average calculations |
-| `median` | Middle value | Statistical analysis |
-| `sampleVariance` | Sample variance | Data spread analysis |
-| `sampleStandardDeviation` | Sample standard deviation | Variability measurement |
-| `minimum` | Smallest value | Range analysis |
-| `maximum` | Largest value | Range analysis |
-| `first` | First value encountered | Sequential data |
-| `last` | Last value encountered | Sequential data |
+- `count` - Count of records
+- `sum` - Sum of numeric values
+- `average` - Arithmetic mean
+- `min` - Minimum value
+- `max` - Maximum value
 
 ### Usage Example
 
 ```tsx
-const config = {
-  rows: ['category'],
-  columns: ['region'],
-  values: [
-    { field: 'revenue', aggregation: 'sum' },
-    { field: 'revenue', aggregation: 'average' },
-    { field: 'quantity', aggregation: 'median' },
-    { field: 'products', aggregation: 'countUnique' }
-  ],
-  filters: []
-};
-```
-
-## 🔍 Advanced Filtering
-
-Comprehensive filtering with multiple operators:
-
-```tsx
-import { applyAdvancedFilters } from '@thorobid-ai/react-pivotgrid';
-
-const filters = [
-  { field: 'name', operator: 'contains', values: ['iPhone'], caseSensitive: false },
-  { field: 'price', operator: 'between', values: [100, 1000] },
-  { field: 'category', operator: 'include', values: ['Electronics', 'Books'] },
-  { field: 'description', operator: 'startsWith', values: ['Premium'] },
-  { field: 'stock', operator: 'greaterThan', values: [0] }
-];
-
-const filteredData = applyAdvancedFilters(data, filters);
-```
-
-### Filter Operators
-
-- **Text**: `contains`, `notContains`, `startsWith`, `endsWith`, `equals`, `notEquals`
-- **Numeric**: `greaterThan`, `lessThan`, `greaterThanOrEqual`, `lessThanOrEqual`, `between`
-- **General**: `include`, `exclude`, `isEmpty`, `isNotEmpty`
-
-## 📱 Responsive Design
-
-Automatic mobile/desktop switching:
-
-```tsx
-<PivotGrid
+<ReactPivotGrid
   data={data}
-  responsive={true}
-  mobileBreakpoint={768}
-  // Automatically switches to mobile view below 768px
-/>
-```
-
-## 🎨 Theming and Customization
-
-```tsx
-<PivotGrid
-  data={data}
-  theme="dark" // 'light' | 'dark' | 'auto'
-  className="my-custom-pivot"
-  customRenderers={{
-    'mobile': MyMobileRenderer,
-    'desktop': MyDesktopRenderer
+  initialConfig={{
+    rows: ['category'],
+    columns: ['region'],
+    values: ['revenue'],
+    aggregation: 'sum'
   }}
 />
 ```
 
-## 🧪 Dummy Data Generation
+## Field Filtering
 
-Generate realistic test data for development:
+Filter data by field values:
 
 ```tsx
-import {
-  generateSalesData,
-  generateEmployeeData,
-  generateInventoryData,
-  getDatasetInfo
-} from '@thorobid-ai/react-pivotgrid';
-
-// Generate 1000 sales records
-const salesData = generateSalesData(1000);
-
-// Generate 500 employee records
-const employeeData = generateEmployeeData(500);
-
-// Generate 800 inventory records
-const inventoryData = generateInventoryData(800);
-
-// Get information about available datasets
-const datasets = getDatasetInfo();
+<ReactPivotGrid
+  data={data}
+  initialConfig={{
+    rows: ['region'],
+    columns: ['category'],
+    values: ['sales'],
+    aggregation: 'sum',
+    filters: {
+      region: ['North', 'South'],
+      category: ['Electronics']
+    }
+  }}
+/>
 ```
 
-## 🔧 API Reference
 
-### PivotGrid Props
+
+
+## API Reference
+
+### ReactPivotGrid Props
 
 ```typescript
-interface PivotGridProps<T> {
+interface ReactPivotGridProps<T extends Record<string, unknown>> {
   data: DataItem<T>[];
-  config?: Partial<PivotConfig<T>>;
   initialConfig?: {
     rows?: FieldKey<T>[];
     columns?: FieldKey<T>[];
@@ -230,88 +143,28 @@ interface PivotGridProps<T> {
     aggregation?: AggregationFunction;
     filters?: Partial<Record<FieldKey<T>, string[]>>;
   };
+  fieldLabels?: Partial<Record<FieldKey<T>, string>>;
   pivotItemThreshold?: number;
-  responsive?: boolean;
-  mobileBreakpoint?: number;
-  height?: string | number;
-  width?: string | number;
-  className?: string;
-  theme?: 'light' | 'dark' | 'auto';
-  loading?: boolean;
-  onConfigChange?: (config: PivotConfig<T>) => void;
-  onError?: (error: PivotValidationError) => void;
-  customRenderers?: Record<string, PivotTableRenderer<T>>;
 }
 ```
 
-### PivotConfig
+### Types
 
 ```typescript
-interface PivotConfig<T> {
+type DataItem<T> = T & Record<string, unknown>;
+type FieldKey<T> = keyof T | string;
+type AggregationFunction = 'count' | 'sum' | 'average' | 'min' | 'max';
+
+interface PivotFieldState<T> {
+  availableFields: FieldKey<T>[];
   rows: FieldKey<T>[];
   columns: FieldKey<T>[];
-  values: ValueFieldConfig<T>[];
-  filters: FilterConfig<T>[];
-  sorts?: SortState<T>[];
-}
-
-interface ValueFieldConfig<T> {
-  field: FieldKey<T>;
-  aggregation: AggregationFunction;
+  values: FieldKey<T>[];
 }
 ```
 
-### Custom Hooks
 
-```tsx
-import { usePivotData, usePivotConfig, useResponsive } from '@thorobid-ai/react-pivotgrid';
-
-// Data management
-const { pivotTable, isComputing, error, isEmpty } = usePivotData({
-  data,
-  config,
-  debounceMs: 300,
-  threshold: 5000,
-  onError: handleError
-});
-
-// Configuration management
-const {
-  config,
-  updateConfig,
-  addRowField,
-  removeRowField,
-  addColumnField,
-  removeColumnField
-} = usePivotConfig(initialConfig);
-
-// Responsive behavior
-const { isMobile } = useResponsive(768);
-```
-
-## 🏗️ Project Structure
-
-```
-react-pivotgrid/
-├── src/
-│   ├── core/                   # Core pivot engine (framework agnostic)
-│   │   ├── engine/            # PivotEngine and aggregations
-│   │   ├── types/             # TypeScript definitions
-│   │   └── utils/             # Data transformation, filtering, validation
-│   ├── components/            # React components
-│   │   └── PivotGrid.tsx      # Main component
-│   ├── hooks/                 # Custom React hooks
-│   │   └── usePivotData.ts    # Pivot data management
-│   └── utils/                 # Utilities and dummy data
-├── tests/                     # Comprehensive test suite
-│   └── unit/                  # Unit tests for math and filters
-├── examples/                  # Example applications
-│   ├── basic/                 # Basic usage examples
-│   └── advanced/              # Advanced feature examples
-└── docs/                      # Documentation (Docusaurus)
-```
-
-## 🧪 Testing
+## Development
 
 ```bash
 # Run tests
@@ -328,53 +181,52 @@ npm run type-check
 
 # Linting
 npm run lint
+
+# Run example
+npm run example
 ```
 
-The test suite focuses on:
-- ✅ Mathematical accuracy of all 14 aggregation functions
-- ✅ Filter logic with edge cases and performance
-- ✅ Data transformation and validation
-- ✅ PivotEngine core calculations
-- ✅ Error handling and edge cases
-
-## 🌟 Advanced Examples
+## Advanced Usage
 
 ### Multi-level Grouping
 
 ```tsx
-const config = {
-  rows: ['region', 'country', 'city'],
-  columns: ['year', 'quarter'],
-  values: [
-    { field: 'revenue', aggregation: 'sum' },
-    { field: 'transactions', aggregation: 'count' }
-  ]
-};
+<ReactPivotGrid
+  data={data}
+  initialConfig={{
+    rows: ['region', 'country'],
+    columns: ['year', 'quarter'],
+    values: ['revenue'],
+    aggregation: 'sum'
+  }}
+/>
 ```
 
-### Complex Filtering
+### With Field Labels
 
 ```tsx
-const config = {
-  rows: ['category'],
-  columns: ['status'],
-  values: [{ field: 'amount', aggregation: 'sum' }],
-  filters: [
-    { field: 'date', values: ['2023-01-01', '2023-12-31'], operator: 'between' },
-    { field: 'region', values: ['North', 'South'] },
-    { field: 'amount', values: ['1000'], operator: 'greaterThan' }
-  ]
-};
+<ReactPivotGrid
+  data={data}
+  initialConfig={{
+    rows: ['region'],
+    columns: ['category'],
+    values: ['sales'],
+    aggregation: 'sum'
+  }}
+  fieldLabels={{
+    region: 'Sales Region',
+    category: 'Product Category',
+    sales: 'Revenue ($)'
+  }}
+/>
 ```
 
-### Performance Optimization
+### Performance Tuning
 
 ```tsx
-<PivotGrid
+<ReactPivotGrid
   data={largeDataset}
-  pivotItemThreshold={10000} // Use Web Workers for datasets > 10k
-  debounceMs={500}           // Debounce calculations
-  responsive={true}          // Optimize for mobile
+  pivotItemThreshold={10000} // Optimize for large datasets
 />
 ```
 
@@ -396,11 +248,12 @@ We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) f
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - Built on [TanStack Table](https://tanstack.com/table) for robust table functionality
-- Inspired by traditional pivot table interfaces like Excel and Google Sheets
-- Community feedback and contributions
+- Drag and drop functionality powered by [@dnd-kit](https://dndkit.com/)
+- UI components built with [Radix UI](https://www.radix-ui.com/)
+- Styled with [Tailwind CSS](https://tailwindcss.com/)
 
 ## 📞 Support
 
